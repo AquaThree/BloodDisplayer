@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.mod.blooddisplayer.BloodDisplayer;
 import net.mod.blooddisplayer.config.Configs;
 
-public class Events {
+public class Event {
 
 	@SubscribeEvent
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
