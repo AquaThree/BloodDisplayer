@@ -18,11 +18,19 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.mod.blooddisplayer.BloodDisplayer;
 import net.mod.blooddisplayer.config.Configs;
 
-public class Event {
+public class Events {
+
+	@SubscribeEvent
+	public void onConfigChanged(OnConfigChangedEvent event) {
+		if (event.getModID().equals(BloodDisplayer.MODID)) {
+			BloodDisplayer.load();
+		}
+	}
 
 	@SubscribeEvent
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
@@ -167,5 +175,5 @@ public class Event {
 		GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
 	}
-
+	
 }
