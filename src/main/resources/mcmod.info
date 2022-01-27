@@ -1,0 +1,17 @@
+[
+{
+  "modid": "blooddisplayer",
+  "name": "BloodDisplayer",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Aqua3"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "requiredMods": [],
+  "dependencies": []
+}
+]
