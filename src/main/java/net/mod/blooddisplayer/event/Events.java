@@ -34,9 +34,6 @@ public class Events {
 
 	@SubscribeEvent
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepth();
-
 		Iterator<Entity> entityIterator = Minecraft.getMinecraft().world.loadedEntityList.iterator();
 		while (entityIterator.hasNext()) {
 			Entity entity = entityIterator.next();
@@ -78,9 +75,6 @@ public class Events {
 
 			drawBar((EntityLivingBase) entity, event.getPartialTicks());
 		}
-
-		GlStateManager.enableLighting();
-		GlStateManager.enableDepth();
 	}
 
 	private void drawBar(EntityLivingBase entity, float partialTicks) {
