@@ -2,7 +2,7 @@
 {
   "modid": "blooddisplayer",
   "name": "BloodDisplayer",
-  "description": "",
+  "description": "血量显示器!!!",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
