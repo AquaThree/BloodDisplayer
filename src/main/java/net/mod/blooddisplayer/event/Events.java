@@ -19,9 +19,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.mod.blooddisplayer.BloodDisplayer;
 import net.mod.blooddisplayer.config.Configs;
+import noppes.npcs.entity.EntityNPCInterface;
 
 public class Events {
 
@@ -68,6 +70,12 @@ public class Events {
 					continue;
 				}
 			}
+			
+			if(!Configs.showNPC && Loader.isModLoaded("customnpcs")) {
+				if(entity instanceof EntityNPCInterface) {
+					continue;
+				}
+			}
 
 			if (!Minecraft.getMinecraft().player.canEntityBeSeen(entity)) {
 				continue;
@@ -97,12 +105,13 @@ public class Events {
 
 		GlStateManager.translate((float) (viewX - renderManager.viewerPosX),
 				(float) (viewY - renderManager.viewerPosY
-						+ (entity.height + 0.5F - (entity.isSneaking() ? 0.25F : 0.0F))),
+						+ (entity.height + 0.5F - (entity.isSneaking() ? 0.25F : 0.0F) + (Minecraft.getMinecraft().player.getRidingEntity() == entity ? 1.0F : 0.0F))),
 				(float) (viewZ - renderManager.viewerPosZ));
 		GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(viewerPitch, 1.0F, 0.0F, 0.0F);
 
 		float scale = 0.65F * Configs.size;
+		float opacity = Configs.opacity;
 
 		GlStateManager.scale(scale, scale, scale);
 		GlStateManager.scale(-0.025F, -0.025F, 0.025F);
@@ -120,8 +129,8 @@ public class Events {
 		GlStateManager.enableBlend();
 
 		if (Configs.customBackground && new ResourceLocation(Configs.backgroundPath) != null) {
+			GlStateManager.color(1.0F, 1.0F, 1.0F, opacity);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Configs.backgroundPath));
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
 			Gui.drawModalRectWithCustomSizedTexture(-width - 1, 15 - height, 0, 0, (width + 1) * 2, height + 1, (width + 1) * 2,
 					height + 1);
 		} else {
@@ -131,10 +140,10 @@ public class Events {
 			BufferBuilder bufferbuilder = tessellator.getBuffer();
 
 			bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.pos(-width - 1, 15 - height, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
-			bufferbuilder.pos(-width - 1, 15, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
-			bufferbuilder.pos(width + 1, 15, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
-			bufferbuilder.pos(width + 1, 15 - height, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
+			bufferbuilder.pos(-width - 1, 15 - height, 0.0D).color(0.0F, 0.0F, 0.0F, opacity).endVertex();
+			bufferbuilder.pos(-width - 1, 15, 0.0D).color(0.0F, 0.0F, 0.0F, opacity).endVertex();
+			bufferbuilder.pos(width + 1, 15, 0.0D).color(0.0F, 0.0F, 0.0F, opacity).endVertex();
+			bufferbuilder.pos(width + 1, 15 - height, 0.0D).color(0.0F, 0.0F, 0.0F, opacity).endVertex();
 			tessellator.draw();
 
 			GlStateManager.enableTexture2D();
@@ -154,12 +163,13 @@ public class Events {
 				15 - height + 26, new Color(1.0F, 1.0F, 1.0F, 1.0F).getRGB());
 
 		float armor = entity.getTotalArmorValue();
+		float maxArmor = entity.getTotalArmorValue() > 20.0F ? entity.getTotalArmorValue() : 20.0F;
 
 		Gui.drawRect(-width + 5, 15 - height + 49, width - 5, 15 - height + 61,
 				new Color(0.0F, 0.0F, 0.0F, 1.0F).getRGB());
-		Gui.drawRect(-width + 7, 15 - height + 51, (int) (-width + 7 + (width - 7 - (-width + 7)) * armor / 20),
+		Gui.drawRect(-width + 7, 15 - height + 51, (int) (-width + 7 + (width - 7 - (-width + 7)) * armor / maxArmor),
 				15 - height + 59, new Color(0.0F, 0.0F, 1.0F, 1.0F).getRGB());
-		fontRenderer.drawString(armor + "/" + 20.0, -fontRenderer.getStringWidth(armor + "/" + 20.0) / 2, 15 - height + 51,
+		fontRenderer.drawString(armor + "/" + 20.0, -fontRenderer.getStringWidth(armor + "/" + maxArmor) / 2, 15 - height + 51,
 				new Color(1.0F, 1.0F, 1.0F, 1.0F).getRGB());
 
 		GlStateManager.glNormal3f(0.0F, 0.0F, 0.0F);
@@ -169,5 +179,4 @@ public class Events {
 		GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
 	}
-
 }
