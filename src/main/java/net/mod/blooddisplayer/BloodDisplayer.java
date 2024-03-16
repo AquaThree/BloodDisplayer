@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -20,7 +21,7 @@ public class BloodDisplayer {
 
 	public static final String MODID = "blooddisplayer";
 	public static final String NAME = "BloodDisplayer";
-	public static final String VERSION = "1.1.2";
+	public static final String VERSION = "1.1.5";
 
 	public static Logger logger;
 
@@ -62,6 +63,10 @@ public class BloodDisplayer {
 		Configs.showBoss = config.get(NAME, "showBoss", Configs.showBoss).getBoolean();
 		Configs.showOnlySelected = config.get(NAME, "showOnlySelected", Configs.showOnlySelected).getBoolean();
 		Configs.size = (float) config.get(NAME, "size", Configs.size).getDouble();
+		Configs.opacity = (float) config.get(NAME, "opacity", Configs.opacity).getDouble();
+		if (Loader.isModLoaded("customnpcs")) {
+			Configs.showNPC = config.get(NAME, "showNPC", Configs.showNPC).getBoolean();
+		}
 		save();
 	}
 
