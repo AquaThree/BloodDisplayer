@@ -20,5 +20,9 @@ public class Configs {
 	public static boolean showOnlySelected = false;
 	
 	public static float size = 1.0F;
+	
+	public static float opacity = 0.5F;
+	
+	public static boolean showNPC = false;
 
 }
